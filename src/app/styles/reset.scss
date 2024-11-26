@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+li {
+    list-style-type: none;
+}
+
+input,
+button,
+textarea,
+select {
+    margin: 0;
+    font: inherit;
+    border: unset;
+    outline: unset;
+    box-shadow: unset;
+}
+
+a {
+    text-decoration: none;
+}

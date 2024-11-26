@@ -1,0 +1,59 @@
+@use 'reset';
+@use 'vars';
+@use 'app';
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.2;
+    font-size: var(--fz-m);
+    font-weight: 400;
+    color: var(--c-black);
+    background-color: var(--c-white);
+    font-synthesis: none;
+    text-rendering: optimizelegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.app {
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    max-width: 1500px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.input {
+    padding: 8px 12px;
+    max-width: 220px;
+    width: 100%;
+    height: 60px;
+    border-radius: 7px;
+    background-color: var(--c-gray-light);
+}
+
+.button {
+    padding: 5px 30px;
+    width: fit-content;
+    height: 35px;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &.button--primary {
+        background-color: var(--c-primary);
+        color: var(--c-white);
+    }
+
+    &.button--transparent {
+        background-color: transparent;
+        color: var(--c-primary);
+        border: 1px solid var(--c-primary);
+    }
+}
