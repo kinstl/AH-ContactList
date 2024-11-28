@@ -57,6 +57,8 @@
 
         .card__info {
             width: calc(100% + 2px);
+            max-height: 350px;
+            overflow: auto;
             left: -1px;
             border-radius: 7px;
             padding: 10px;
