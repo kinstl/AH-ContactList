@@ -23,9 +23,75 @@
     gap: 20px;
     flex-wrap: wrap;
 
-    .contacts__item {
+    .contacts__card {
+        position: relative;
         width: 255px;
         height: 45px;
-        background-color: black;
+        border-radius: 7px;
+        border: 1px solid var(--c-primary);
+        color: var(--c-primary);
+
+        .card__container {
+            padding: 5px 10px;
+            position: absolute;
+            display: flex;
+            height: 100%;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        &.filled {
+            background-color: var(--c-primary);
+            color: var(--c-white);
+            transition: all 0.3s ease-in;
+
+            .card__container {
+                cursor: pointer;
+            }
+
+            &:hover {
+                background-color: var(--c-primary-hovered);
+            }
+        }
+
+        .card__info {
+            width: calc(100% + 2px);
+            left: -1px;
+            border-radius: 7px;
+            padding: 10px;
+            display: block;
+            position: absolute;
+            top: 32px;
+            background-color: var(--c-primary);
+            z-index: 1;
+
+            .contact {
+                position: relative;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--c-white);
+
+                &:first-child {
+                    border-top: 1px solid var(--c-white);
+                }
+
+                &:last-child {
+                    border-bottom: unset;
+                }
+
+                .contact__text {
+                    font-size: var(--fz-contact);
+                }
+
+                i {
+                    position: absolute;
+                    top: 10px;
+                    right: 0;
+                    font-size: var(--fz-contact);
+                    color: var(--c-white);
+                    cursor: pointer;
+                }
+            }
+        }
     }
 }

@@ -45,15 +45,25 @@ body {
     border-radius: 7px;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s ease-in;
 
     &.button--primary {
         background-color: var(--c-primary);
         color: var(--c-white);
+
+        &:hover {
+            background-color: var(--c-primary-hovered);
+        }
     }
 
     &.button--transparent {
         background-color: transparent;
         color: var(--c-primary);
         border: 1px solid var(--c-primary);
+
+        &:hover {
+            background-color: var(--c-primary);
+            color: var(--c-white);
+        }
     }
 }

@@ -3,6 +3,7 @@
     --c-black: #213547;
     --c-white: #fdfdfd;
     --c-primary: #365b61;
+    --c-primary-hovered: #284549;
     --c-gray-dark: #717171;
     --c-gray-light: #f3f1f1;
 
@@ -11,4 +12,5 @@
     --fz-l: calc(var(--fz) + 2px); // 22px
     --fz-m: var(--fz);
     --fz-s: calc(var(--fz) - 2px); // 18px
+    --fz-contact: 14px;
 }
