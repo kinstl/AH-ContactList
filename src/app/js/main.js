@@ -1,3 +1,8 @@
+import { saveContact } from './data/saveContact';
+import {
+    getContactsFromLocalStorage,
+    saveContactsToLocalStorage,
+} from './data/localStorage';
 import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
 import { initPhoneMask } from './helpers/initPhoneMask';
 import { validate } from './helpers/validate';
@@ -9,6 +14,7 @@ const vacancyNode = document.getElementById('js-input-vacancy');
 const phoneNode = document.getElementById('js-input-phone');
 const contactsCardNodes = document.querySelectorAll('.contacts__card');
 
+loadContacts();
 initPhoneMask(phoneNode);
 initContactsCardZIndex(contactsCardNodes);
 
@@ -52,7 +58,8 @@ function updateCard(cardNode, name, vacancy, phone) {
     const infoNode =
         cardNode.querySelector('.card__info') || createInfoNode(cardNode);
 
-    createContact(infoNode, name, vacancy, phone);
+    const contactId = createContact(infoNode, name, vacancy, phone);
+    saveContact(contactId, name, vacancy, phone);
 }
 
 function createInfoNode(cardNode) {
@@ -62,9 +69,14 @@ function createInfoNode(cardNode) {
     return newInfoNode;
 }
 
-function createContact(infoNode, name, vacancy, phone) {
+function createContact(infoNode, name, vacancy, phone, id) {
+    if (!id) {
+        id = `contact_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+    }
+
     const newContactNode = document.createElement('div');
     newContactNode.classList.add('contact');
+    newContactNode.dataset.id = id;
 
     newContactNode.innerHTML = `
         <p class="contact__text">
@@ -87,18 +99,68 @@ function createContact(infoNode, name, vacancy, phone) {
         .addEventListener('click', () => editContact(infoNode, newContactNode));
 
     infoNode.append(newContactNode);
+
+    return id;
 }
 
 function editContact() {
     console.log(213);
 }
 
+function loadContacts() {
+    const contactsData = getContactsFromLocalStorage();
+
+    for (const [letter, contacts] of Object.entries(contactsData)) {
+        const cardNode = document.getElementById(letter);
+
+        if (cardNode) {
+            cardNode.classList.add('filled');
+
+            const infoNode =
+                cardNode.querySelector('.card__info') ||
+                createInfoNode(cardNode);
+
+            // Добавляем каждый контакт в карточку
+            contacts.forEach(({ id, name, vacancy, phone }) => {
+                createContact(infoNode, name, vacancy, phone, id);
+            });
+
+            // Обновляем счетчик карточки
+            const numNode = cardNode.querySelector('.card__num');
+
+            if (contacts.length) {
+                numNode.innerText = contacts.length;
+            } else {
+                numNode.innerText = '';
+            }
+        }
+    }
+}
+
 function deleteContact(infoNode, contactNode) {
     contactNode.remove();
 
+    const contactId = contactNode.dataset.id;
     const cardNode = infoNode.closest('.contacts__card');
     const numNode = cardNode.querySelector('.card__num');
     const currentValue = parseInt(numNode.innerText, 10) || 0;
+
+    const firstLetter = cardNode.id;
+
+    // Обновляем `localStorage`
+    const contactsData = getContactsFromLocalStorage();
+
+    if (contactsData[firstLetter]) {
+        contactsData[firstLetter] = contactsData[firstLetter].filter(
+            (contact) => contact.id !== contactId, // Удаляем по ID
+        );
+
+        if (contactsData[firstLetter].length === 0) {
+            delete contactsData[firstLetter];
+        }
+
+        saveContactsToLocalStorage(contactsData);
+    }
 
     if (currentValue <= 1) {
         numNode.innerText = '';
