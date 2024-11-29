@@ -1,3 +1,7 @@
+import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
+import { initPhoneMask } from './helpers/phoneMask';
+import { validateValues } from './helpers/validate';
+
 const btnAddNode = document.getElementById('js-btn-add');
 const btnClearNode = document.getElementById('js-btn-clear');
 const nameNode = document.getElementById('js-input-name');
@@ -5,30 +9,37 @@ const vacancyNode = document.getElementById('js-input-vacancy');
 const phoneNode = document.getElementById('js-input-phone');
 const contactsCardNodes = document.querySelectorAll('.contacts__card');
 
+initPhoneMask(phoneNode);
+initContactsCardZIndex(contactsCardNodes);
+
 btnAddNode.addEventListener('click', () => {
     const name = nameNode.value.trim();
+    const nameFirstLetter = name.charAt(0).toLowerCase();
     const vacancy = vacancyNode.value.trim();
     const phone = phoneNode.value.trim();
-
-    // if (!name || !vacancy || !phone) {
-    //     alert('All fields are required!');
-    //     return;
-    // }
-
-    const nameFirstLetter = name.charAt(0).toLowerCase();
 
     const targetCard = Array.from(contactsCardNodes).find(
         (node) => node.id === nameFirstLetter,
     );
 
-    if (!targetCard) {
-        alert('No card for this letter!');
+    // Валидация на одинаковый контакт - проверяем данные, а не верстку
+    const validationResult = validateValues(targetCard, name, vacancy, phone);
+
+    if (!validationResult.status) {
+        alert(validationResult.message);
         return;
     }
 
     updateCard(targetCard, name, vacancy, phone);
 
     // clearInputs();
+});
+
+contactsCardNodes.forEach((node) => {
+    const cardContainerNode = node.querySelector('.card__container');
+    cardContainerNode.addEventListener('click', () => {
+        node.classList.toggle('show');
+    });
 });
 
 function updateCard(cardNode, name, vacancy, phone) {
@@ -61,6 +72,7 @@ function createContact(infoNode, name, vacancy, phone) {
             Vacancy: ${vacancy}<br/>
             Phone: ${phone}
         </p>
+        <i class="fa-solid fa-pen js-contact-edit"></i>
         <i class="fa-solid fa-xmark js-contact-delete"></i>
     `;
 
@@ -70,7 +82,15 @@ function createContact(infoNode, name, vacancy, phone) {
             deleteContact(infoNode, newContactNode),
         );
 
+    newContactNode
+        .querySelector('.js-contact-edit')
+        .addEventListener('click', () => editContact(infoNode, newContactNode));
+
     infoNode.append(newContactNode);
+}
+
+function editContact() {
+    console.log(213);
 }
 
 function deleteContact(infoNode, contactNode) {
@@ -82,7 +102,7 @@ function deleteContact(infoNode, contactNode) {
 
     if (currentValue <= 1) {
         numNode.innerText = '';
-        cardNode.classList.remove('filled');
+        cardNode.classList.remove('filled', 'show');
     } else {
         numNode.innerText = currentValue - 1;
     }

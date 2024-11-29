@@ -22,50 +22,40 @@
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    position: relative;
 
     .contacts__card {
         position: relative;
         width: 255px;
         height: 45px;
-        border-radius: 7px;
-        border: 1px solid var(--c-primary);
         color: var(--c-primary);
 
         .card__container {
-            padding: 5px 10px;
+            width: 100%;
+            padding: 9px 10px;
+            height: 100%;
             position: absolute;
             display: flex;
-            height: 100%;
-            width: 100%;
             justify-content: space-between;
-            align-items: center;
-        }
-
-        &.filled {
-            background-color: var(--c-primary);
-            color: var(--c-white);
-            transition: all 0.3s ease-in;
-
-            .card__container {
-                cursor: pointer;
-            }
-
-            &:hover {
-                background-color: var(--c-primary-hovered);
-            }
+            align-items: flex-start;
+            border: 1px solid var(--c-primary);
+            border-radius: 7px;
+            user-select: none;
+            pointer-events: none;
+            transition: background-color 0.3s ease-in;
         }
 
         .card__info {
-            width: calc(100% + 2px);
+            display: none;
+            width: 100%;
             max-height: 350px;
             overflow: auto;
-            left: -1px;
             border-radius: 7px;
             padding: 10px;
-            display: block;
             position: absolute;
-            top: 32px;
+            top: 44px;
             background-color: var(--c-primary);
+            box-shadow: 0 3px 3px 1px rgb(0 0 0 / 25%);
             z-index: 1;
 
             .contact {
@@ -88,10 +78,45 @@
                 i {
                     position: absolute;
                     top: 10px;
-                    right: 0;
-                    font-size: var(--fz-contact);
                     color: var(--c-white);
                     cursor: pointer;
+
+                    &.fa-pen {
+                        right: 20px;
+                        top: 11px;
+                        font-size: 10px;
+                    }
+
+                    &.fa-xmark {
+                        right: 0;
+                        top: 9px;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+
+        &.show {
+            .card__container {
+                height: 125%;
+            }
+
+            .card__info {
+                display: block;
+            }
+        }
+
+        &.filled {
+            color: var(--c-white);
+            transition: all 0.3s ease-in;
+
+            .card__container {
+                background-color: var(--c-primary);
+                pointer-events: all;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--c-primary-hovered);
                 }
             }
         }
