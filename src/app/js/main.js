@@ -1,6 +1,6 @@
 import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
-import { initPhoneMask } from './helpers/phoneMask';
-import { validateValues } from './helpers/validate';
+import { initPhoneMask } from './helpers/initPhoneMask';
+import { validate } from './helpers/validate';
 
 const btnAddNode = document.getElementById('js-btn-add');
 const btnClearNode = document.getElementById('js-btn-clear');
@@ -23,7 +23,7 @@ btnAddNode.addEventListener('click', () => {
     );
 
     // Валидация на одинаковый контакт - проверяем данные, а не верстку
-    const validationResult = validateValues(targetCard, name, vacancy, phone);
+    const validationResult = validate(targetCard, name, vacancy, phone);
 
     if (!validationResult.status) {
         alert(validationResult.message);

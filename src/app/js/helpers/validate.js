@@ -1,4 +1,4 @@
-export function validateValues(cardNode, name, vacancy, phone) {
+export function validate(cardNode, name, vacancy, phone) {
     const result = {
         status: true,
         message: '',
