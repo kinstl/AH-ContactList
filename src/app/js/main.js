@@ -1,4 +1,4 @@
-import { saveContact } from './data/saveContact';
+import { getContact, saveContact } from './data/contact';
 import {
     getContactsFromLocalStorage,
     saveContactsToLocalStorage,
@@ -36,7 +36,7 @@ btnAddNode.addEventListener('click', () => {
         return;
     }
 
-    updateCard(targetCard, name, vacancy, phone);
+    addContact(targetCard, name, vacancy, phone);
 
     // clearInputs();
 });
@@ -48,7 +48,7 @@ contactsCardNodes.forEach((node) => {
     });
 });
 
-function updateCard(cardNode, name, vacancy, phone) {
+function addContact(cardNode, name, vacancy, phone) {
     cardNode.classList.add('filled');
 
     const numNode = cardNode.querySelector('.card__num');
@@ -96,16 +96,35 @@ function createContact(infoNode, name, vacancy, phone, id) {
 
     newContactNode
         .querySelector('.js-contact-edit')
-        .addEventListener('click', () => editContact(infoNode, newContactNode));
+        .addEventListener('click', () => editContact(id, newContactNode));
 
     infoNode.append(newContactNode);
 
     return id;
 }
 
-function editContact() {
-    console.log(213);
+function editContact(id, contactNode) {
+    const contact = getContact(id);
+    const { name, vacancy, phone } = contact;
+    // открыть модалку
+    // вставить данные
+    // слушатель на сохранение updateContact(contactNode, contact, id)
 }
+
+// function updateContact(contactNode, contact, id) {
+//     const { name, vacancy, phone } = contact;
+
+//     const contactTextNode = contactNode.querySelector('.contact__text');
+//     contactTextNode.innerHTML = `
+//         <p class="contact__text">
+//             Name: ${name}<br/>
+//             Vacancy: ${vacancy}<br/>
+//             Phone: ${phone}
+//         </p>
+//         `;
+
+//     saveContact(id, name, vacancy, phone);
+// }
 
 function loadContacts() {
     const contactsData = getContactsFromLocalStorage();
@@ -120,12 +139,10 @@ function loadContacts() {
                 cardNode.querySelector('.card__info') ||
                 createInfoNode(cardNode);
 
-            // Добавляем каждый контакт в карточку
             contacts.forEach(({ id, name, vacancy, phone }) => {
                 createContact(infoNode, name, vacancy, phone, id);
             });
 
-            // Обновляем счетчик карточки
             const numNode = cardNode.querySelector('.card__num');
 
             if (contacts.length) {
@@ -147,12 +164,11 @@ function deleteContact(infoNode, contactNode) {
 
     const firstLetter = cardNode.id;
 
-    // Обновляем `localStorage`
     const contactsData = getContactsFromLocalStorage();
 
     if (contactsData[firstLetter]) {
         contactsData[firstLetter] = contactsData[firstLetter].filter(
-            (contact) => contact.id !== contactId, // Удаляем по ID
+            (contact) => contact.id !== contactId,
         );
 
         if (contactsData[firstLetter].length === 0) {
