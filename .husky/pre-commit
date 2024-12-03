@@ -1,0 +1,2 @@
+npm run lint:js:fix
+npm run lint:scss:fix
