@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "lint:js": "eslint \"**/*.{js,jsx}\"",
     "lint:js:fix": "eslint \"**/*.{js,jsx}\" --fix",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "eslint": "^9.16.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "gh-pages": "^6.2.0",
     "globals": "^15.13.0",
     "husky": "^9.1.7",
     "prettier": "^3.3.3",

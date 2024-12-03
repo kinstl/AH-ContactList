@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    base: '/AH-ContactList/',
     // plugins: [svgr({ exportAsDefault: true }), react()],
     resolve: {
         // alias: [{ find: '@', replacement: '/src' }],
