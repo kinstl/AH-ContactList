@@ -6,6 +6,7 @@ import {
 import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
 import { initPhoneMask } from './helpers/initPhoneMask';
 import { validate } from './helpers/validate';
+import { handleEditModal } from './modal/modal';
 
 const btnAddNode = document.getElementById('js-btn-add');
 const btnClearNode = document.getElementById('js-btn-clear');
@@ -106,25 +107,10 @@ function createContact(infoNode, name, vacancy, phone, id) {
 function editContact(id, contactNode) {
     const contact = getContact(id);
     const { name, vacancy, phone } = contact;
-    // открыть модалку
-    // вставить данные
+
+    handleEditModal(id, contact, contactNode);
     // слушатель на сохранение updateContact(contactNode, contact, id)
 }
-
-// function updateContact(contactNode, contact, id) {
-//     const { name, vacancy, phone } = contact;
-
-//     const contactTextNode = contactNode.querySelector('.contact__text');
-//     contactTextNode.innerHTML = `
-//         <p class="contact__text">
-//             Name: ${name}<br/>
-//             Vacancy: ${vacancy}<br/>
-//             Phone: ${phone}
-//         </p>
-//         `;
-
-//     saveContact(id, name, vacancy, phone);
-// }
 
 function loadContacts() {
     const contactsData = getContactsFromLocalStorage();

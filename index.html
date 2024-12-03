@@ -213,6 +213,40 @@
                     </div>
                 </div>
             </div>
+            <div class="modal__overlay"></div>
+            <div class="modal modal--edit">
+                <div class="modal__content">
+                    <i
+                        class="fa-solid fa-xmark modal__close"
+                        aria-hidden="true"
+                    ></i>
+                    <h2 class="modal__title">Edit contact</h2>
+                    <div class="modal--edit__inputs">
+                        <input
+                            id="js-edit-name"
+                            type="text"
+                            class="input"
+                            placeholder="Name"
+                        />
+                        <input
+                            id="js-edit-vacancy"
+                            type="text"
+                            class="input"
+                            placeholder="Vacancy"
+                        />
+                        <input
+                            id="js-edit-phone"
+                            type="tel"
+                            class="input"
+                            placeholder="Phone"
+                        />
+                    </div>
+                    <button id="js-edit-save" class="button button--primary">
+                        Save
+                    </button>
+                </div>
+            </div>
+            <div class="modal modal--search"></div>
         </div>
         <script type="module" src="./src/app/js/main.js"></script>
     </body>
