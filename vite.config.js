@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
+import circleDependency from 'vite-plugin-circular-dependency';
 
 export default defineConfig({
     base: '/AH-ContactList/',
-    // plugins: [svgr({ exportAsDefault: true }), react()],
+    plugins: [circleDependency()],
     resolve: {
         // alias: [{ find: '@', replacement: '/src' }],
     },

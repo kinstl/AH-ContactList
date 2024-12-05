@@ -21,10 +21,10 @@ export default [
             'jsx-a11y/no-static-element-interactions': 'off',
             'jsx-a11y/click-events-have-key-events': 'off',
             'no-param-reassign': 'off',
-            'no-undef': 'warn',
+            'no-undef': 'error',
             'no-unused-vars': 'warn',
             'eol-last': 'off',
         },
-        ignores: ['src/app/js/plugins/*'],
+        ignores: ['src/app/js/plugins/*', 'dist/**/*'],
     },
 ];

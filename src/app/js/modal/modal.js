@@ -1,4 +1,4 @@
-import { saveContact } from '../data/contact';
+import { addContact, deleteContact, updateContact } from '../data/contact';
 
 const overlayNode = document.querySelector('.modal__overlay');
 
@@ -16,31 +16,29 @@ export function handleEditModal(id, contact, contactNode) {
     vacancyNode.value = vacancy;
     phoneNode.value = phone;
 
-    saveBtnNode.addEventListener('click', () => {
+    const saveHandler = () => {
         const newName = nameNode.value;
         const newVacancy = vacancyNode.value;
         const newPhone = phoneNode.value;
 
+        const nameFirstLetter = name.charAt(0).toLowerCase();
+        const newNameFirstLetter = newName.charAt(0).toLowerCase();
+
         contact = { name: newName, vacancy: newVacancy, phone: newPhone };
 
-        updateContact(contactNode, contact, id);
+        if (nameFirstLetter === newNameFirstLetter) {
+            updateContact(contactNode, contact, id);
+        } else {
+            const cardNode = document.getElementById(newNameFirstLetter);
+            addContact(cardNode, newName, newVacancy, newPhone);
+            deleteContact(contactNode);
+        }
+
+        saveBtnNode.removeEventListener('click', saveHandler);
         closeModal('.modal--edit');
-    });
-}
+    };
 
-function updateContact(contactNode, contact, id) {
-    const { name, vacancy, phone } = contact;
-
-    const contactTextNode = contactNode.querySelector('.contact__text');
-    contactTextNode.innerHTML = `
-        <p class="contact__text">
-            Name: ${name}<br/>
-            Vacancy: ${vacancy}<br/>
-            Phone: ${phone}
-        </p>
-        `;
-
-    saveContact(id, name, vacancy, phone);
+    saveBtnNode.addEventListener('click', saveHandler);
 }
 
 export function handleSearchModal() {

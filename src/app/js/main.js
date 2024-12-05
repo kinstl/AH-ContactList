@@ -1,15 +1,13 @@
-import { getContact, saveContact } from './data/contact';
-import {
-    getContactsFromLocalStorage,
-    saveContactsToLocalStorage,
-} from './data/localStorage';
+import { addContact } from './data/contact';
+import { getContactsFromLocalStorage } from './data/localStorage';
+import { clearInputs } from './helpers/clearInputs';
 import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
 import { initPhoneMask } from './helpers/initPhoneMask';
 import { validate } from './helpers/validate';
-import { handleEditModal } from './modal/modal';
+import { createContact, createInfoNode } from './view/view';
 
 const btnAddNode = document.getElementById('js-btn-add');
-const btnClearNode = document.getElementById('js-btn-clear');
+// const btnClearNode = document.getElementById('js-btn-clear');
 const nameNode = document.getElementById('js-input-name');
 const vacancyNode = document.getElementById('js-input-vacancy');
 const phoneNode = document.getElementById('js-input-phone');
@@ -39,7 +37,7 @@ btnAddNode.addEventListener('click', () => {
 
     addContact(targetCard, name, vacancy, phone);
 
-    // clearInputs();
+    clearInputs(nameNode, vacancyNode, phoneNode);
 });
 
 contactsCardNodes.forEach((node) => {
@@ -48,69 +46,6 @@ contactsCardNodes.forEach((node) => {
         node.classList.toggle('show');
     });
 });
-
-function addContact(cardNode, name, vacancy, phone) {
-    cardNode.classList.add('filled');
-
-    const numNode = cardNode.querySelector('.card__num');
-    const currentValue = parseInt(numNode.innerText, 10) || 0;
-    numNode.innerText = currentValue + 1;
-
-    const infoNode =
-        cardNode.querySelector('.card__info') || createInfoNode(cardNode);
-
-    const contactId = createContact(infoNode, name, vacancy, phone);
-    saveContact(contactId, name, vacancy, phone);
-}
-
-function createInfoNode(cardNode) {
-    const newInfoNode = document.createElement('div');
-    newInfoNode.classList.add('card__info');
-    cardNode.append(newInfoNode);
-    return newInfoNode;
-}
-
-function createContact(infoNode, name, vacancy, phone, id) {
-    if (!id) {
-        id = `contact_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-    }
-
-    const newContactNode = document.createElement('div');
-    newContactNode.classList.add('contact');
-    newContactNode.dataset.id = id;
-
-    newContactNode.innerHTML = `
-        <p class="contact__text">
-            Name: ${name}<br/>
-            Vacancy: ${vacancy}<br/>
-            Phone: ${phone}
-        </p>
-        <i class="fa-solid fa-pen js-contact-edit"></i>
-        <i class="fa-solid fa-xmark js-contact-delete"></i>
-    `;
-
-    newContactNode
-        .querySelector('.js-contact-delete')
-        .addEventListener('click', () =>
-            deleteContact(infoNode, newContactNode),
-        );
-
-    newContactNode
-        .querySelector('.js-contact-edit')
-        .addEventListener('click', () => editContact(id, newContactNode));
-
-    infoNode.append(newContactNode);
-
-    return id;
-}
-
-function editContact(id, contactNode) {
-    const contact = getContact(id);
-    const { name, vacancy, phone } = contact;
-
-    handleEditModal(id, contact, contactNode);
-    // слушатель на сохранение updateContact(contactNode, contact, id)
-}
 
 function loadContacts() {
     const contactsData = getContactsFromLocalStorage();
@@ -138,40 +73,4 @@ function loadContacts() {
             }
         }
     }
-}
-
-function deleteContact(infoNode, contactNode) {
-    contactNode.remove();
-
-    const contactId = contactNode.dataset.id;
-    const cardNode = infoNode.closest('.contacts__card');
-    const numNode = cardNode.querySelector('.card__num');
-    const currentValue = parseInt(numNode.innerText, 10) || 0;
-
-    const firstLetter = cardNode.id;
-
-    const contactsData = getContactsFromLocalStorage();
-
-    if (contactsData[firstLetter]) {
-        contactsData[firstLetter] = contactsData[firstLetter].filter(
-            (contact) => contact.id !== contactId,
-        );
-
-        if (contactsData[firstLetter].length === 0) {
-            delete contactsData[firstLetter];
-        }
-
-        saveContactsToLocalStorage(contactsData);
-    }
-
-    if (currentValue <= 1) {
-        numNode.innerText = '';
-        cardNode.classList.remove('filled', 'show');
-    } else {
-        numNode.innerText = currentValue - 1;
-    }
-}
-
-function clearInputs() {
-    [nameNode, vacancyNode, phoneNode].forEach((input) => (input.value = ''));
 }
