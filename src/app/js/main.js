@@ -7,7 +7,7 @@ import { validate } from './helpers/validate';
 import { createContact, createInfoNode } from './view/view';
 
 const btnAddNode = document.getElementById('js-btn-add');
-// const btnClearNode = document.getElementById('js-btn-clear');
+const btnClearNode = document.getElementById('js-btn-clear');
 const nameNode = document.getElementById('js-input-name');
 const vacancyNode = document.getElementById('js-input-vacancy');
 const phoneNode = document.getElementById('js-input-phone');
@@ -38,6 +38,21 @@ btnAddNode.addEventListener('click', () => {
     addContact(targetCard, name, vacancy, phone);
 
     clearInputs(nameNode, vacancyNode, phoneNode);
+});
+
+btnClearNode.addEventListener('click', () => {
+    contactsCardNodes.forEach((node) => {
+        const infoNode = node.querySelector('.card__info');
+        const numNode = node.querySelector('.card__num');
+
+        if (infoNode && numNode) {
+            infoNode.remove();
+            numNode.innerText = '';
+            node.classList.remove('filled');
+        }
+    });
+
+    localStorage.removeItem('contacts');
 });
 
 contactsCardNodes.forEach((node) => {
