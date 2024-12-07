@@ -5,8 +5,8 @@
         <link rel="icon" type="image/svg+xml" href="/AH-ContactList/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Contact List on JS</title>
-      <script type="module" crossorigin src="/AH-ContactList/assets/index-BTb7XWXd.js"></script>
-      <link rel="stylesheet" crossorigin href="/AH-ContactList/assets/index-DCwANniT.css">
+      <script type="module" crossorigin src="/AH-ContactList/assets/index-Dw1Q7PkF.js"></script>
+      <link rel="stylesheet" crossorigin href="/AH-ContactList/assets/index-EGZOBUKF.css">
     </head>
     <body>
         <div id="app" class="app">
@@ -212,41 +212,66 @@
             </div>
             <div class="modal__overlay"></div>
             <div class="modal modal--edit">
-                <div class="modal__content">
-                    <i
-                        class="fa-solid fa-xmark modal__close"
-                        aria-hidden="true"
-                    ></i>
-                    <h2 class="modal__title">Edit contact</h2>
-                    <div class="modal--edit__inputs">
-                        <input
-                            id="js-edit-name"
-                            type="text"
-                            class="input"
-                            placeholder="Name"
-                        />
-                        <input
-                            id="js-edit-vacancy"
-                            type="text"
-                            class="input"
-                            placeholder="Vacancy"
-                        />
-                        <input
-                            id="js-edit-phone"
-                            type="tel"
-                            class="input"
-                            placeholder="Phone"
-                        />
+                <div class="modal__wrapper">
+                    <div class="modal__content">
+                        <i
+                            class="fa-solid fa-xmark modal__close"
+                            aria-hidden="true"
+                        ></i>
+                        <h2 class="modal__title">Edit contact</h2>
+                        <div class="modal--edit__inputs">
+                            <input
+                                id="js-edit-name"
+                                type="text"
+                                class="input"
+                                placeholder="Name"
+                            />
+                            <input
+                                id="js-edit-vacancy"
+                                type="text"
+                                class="input"
+                                placeholder="Vacancy"
+                            />
+                            <input
+                                id="js-edit-phone"
+                                type="tel"
+                                class="input"
+                                placeholder="Phone"
+                            />
+                        </div>
+                        <button
+                            id="js-edit-save"
+                            class="button button--primary modal__button"
+                        >
+                            Save
+                        </button>
                     </div>
-                    <button
-                        id="js-edit-save"
-                        class="button button--primary modal__button"
-                    >
-                        Save
-                    </button>
                 </div>
             </div>
-            <div class="modal modal--search"></div>
+            <div class="modal modal--search">
+                <div class="modal__wrapper">
+                    <div class="modal__content">
+                        <i
+                            class="fa-solid fa-xmark modal__close"
+                            aria-hidden="true"
+                        ></i>
+                        <h2 class="modal__title">Search contacts</h2>
+                        <input
+                            id="js-search-input"
+                            type="text"
+                            class="input"
+                            placeholder="Search"
+                        />
+                        <div class="modal--search__contacts"></div>
+                        <button
+                            id="js-search-all"
+                            class="button button--primary modal__button"
+                        >
+                            Show All
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
