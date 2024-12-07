@@ -129,12 +129,17 @@
     }
 
     .modal--search__contacts {
-        margin-top: 30px;
-        background-color: var(--c-primary);
-        border-radius: 7px;
-        padding: 20px;
-        max-height: 400px;
-        overflow-y: auto;
+        display: none;
+
+        &.filled {
+            display: block;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 7px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: var(--c-primary);
+        }
 
         .contact {
             position: relative;

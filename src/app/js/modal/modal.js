@@ -1,6 +1,8 @@
 import { addContact, deleteContact, updateContact } from '../data/contact';
+import { getContactsFromLocalStorage } from '../data/localStorage';
 import { initPhoneMask } from '../helpers/initPhoneMask';
 import { handleValidation } from '../helpers/validate';
+import { createContact } from '../view/view';
 
 const overlayNode = document.querySelector('.modal__overlay');
 const bodyNode = document.querySelector('body');
@@ -53,10 +55,20 @@ export function handleSearchModal() {
     const searchAllBtnNode = document.querySelector(
         '.modal--search #js-search-all',
     );
+    const contactsNode = document.querySelector(
+        '.modal--search .modal--search__contacts',
+    );
 
     const searchAllHandler = () => {
-        console.log(123);
-        searchAllBtnNode.removeEventListener('click', searchAllHandler);
+        const contactsData = getContactsFromLocalStorage();
+
+        for (const contacts of Object.values(contactsData)) {
+            contacts.forEach((contact) => {
+                createContact(contactsNode, contact);
+            });
+        }
+
+        contactsNode.classList.add('filled');
     };
 
     searchAllBtnNode.addEventListener('click', searchAllHandler);
