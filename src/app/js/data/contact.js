@@ -5,7 +5,9 @@ import {
     saveContactsToLocalStorage,
 } from './localStorage';
 
-export function saveContact(contactId, name, vacancy, phone) {
+export function saveContact(contactId, contact) {
+    const { name, vacancy, phone } = contact;
+
     const firstLetter = name.charAt(0).toLowerCase();
     const contactsData = getContactsFromLocalStorage();
 
@@ -31,9 +33,7 @@ export function saveContact(contactId, name, vacancy, phone) {
     saveContactsToLocalStorage(contactsData);
 }
 
-export function addContact(cardNode, name, vacancy, phone) {
-    console.log(123);
-
+export function addContact(cardNode, contact) {
     cardNode.classList.add('filled');
 
     const numNode = cardNode.querySelector('.card__num');
@@ -43,16 +43,15 @@ export function addContact(cardNode, name, vacancy, phone) {
     const infoNode =
         cardNode.querySelector('.card__info') || createInfoNode(cardNode);
 
-    const contactId = createContact(infoNode, name, vacancy, phone);
-    saveContact(contactId, name, vacancy, phone);
+    const contactId = createContact(infoNode, contact);
+    saveContact(contactId, contact);
 }
 
 export function getContact(contactId) {
     const contactsData = getContactsFromLocalStorage();
 
-    for (const [letter, contacts] of Object.entries(contactsData)) {
+    for (const contacts of Object.values(contactsData)) {
         const contact = contacts.find((contact) => contact.id === contactId);
-
         if (contact) {
             return contact;
         }
@@ -73,7 +72,7 @@ export function updateContact(contactNode, contact, id) {
         </p>
         `;
 
-    saveContact(id, name, vacancy, phone);
+    saveContact(id, contact);
 }
 
 export function editContact(id, contactNode) {

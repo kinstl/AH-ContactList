@@ -7,7 +7,10 @@ export function createInfoNode(cardNode) {
     return newInfoNode;
 }
 
-export function createContact(infoNode, name, vacancy, phone, id) {
+export function createContact(infoNode, contact) {
+    const { name, vacancy, phone } = contact;
+
+    let id = contact.id;
     if (!id) {
         id = `contact_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
     }

@@ -3,7 +3,7 @@ import { getContactsFromLocalStorage } from './data/localStorage';
 import { clearInputs } from './helpers/clearInputs';
 import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
 import { initPhoneMask } from './helpers/initPhoneMask';
-import { validate } from './helpers/validate';
+import { handleValidation } from './helpers/validate';
 import { createContact, createInfoNode } from './view/view';
 
 const btnAddNode = document.getElementById('js-btn-add');
@@ -18,24 +18,23 @@ initPhoneMask(phoneNode);
 initContactsCardZIndex(contactsCardNodes);
 
 btnAddNode.addEventListener('click', () => {
-    const name = nameNode.value.trim();
-    const nameFirstLetter = name.charAt(0).toLowerCase();
-    const vacancy = vacancyNode.value.trim();
-    const phone = phoneNode.value.trim();
+    const contact = {
+        name: nameNode.value,
+        vacancy: vacancyNode.value,
+        phone: phoneNode.value,
+    };
+
+    const nameFirstLetter = contact.name.charAt(0).toLowerCase();
 
     const targetCard = Array.from(contactsCardNodes).find(
         (node) => node.id === nameFirstLetter,
     );
 
-    // Валидация на одинаковый контакт - проверяем данные, а не верстку
-    const validationResult = validate(targetCard, name, vacancy, phone);
-
-    if (!validationResult.status) {
-        alert(validationResult.message);
+    if (!handleValidation(targetCard, contact)) {
         return;
     }
 
-    addContact(targetCard, name, vacancy, phone);
+    addContact(targetCard, contact);
 
     clearInputs(nameNode, vacancyNode, phoneNode);
 });
@@ -75,8 +74,8 @@ function loadContacts() {
                 cardNode.querySelector('.card__info') ||
                 createInfoNode(cardNode);
 
-            contacts.forEach(({ id, name, vacancy, phone }) => {
-                createContact(infoNode, name, vacancy, phone, id);
+            contacts.forEach((contact) => {
+                createContact(infoNode, contact);
             });
 
             const numNode = cardNode.querySelector('.card__num');

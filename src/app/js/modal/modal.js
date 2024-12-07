@@ -1,4 +1,6 @@
 import { addContact, deleteContact, updateContact } from '../data/contact';
+import { initPhoneMask } from '../helpers/initPhoneMask';
+import { handleValidation } from '../helpers/validate';
 
 const overlayNode = document.querySelector('.modal__overlay');
 
@@ -12,30 +14,35 @@ export function handleEditModal(id, contact, contactNode) {
     const vacancyNode = document.querySelector('.modal--edit #js-edit-vacancy');
     const phoneNode = document.querySelector('.modal--edit #js-edit-phone');
 
+    initPhoneMask(phoneNode);
+
     nameNode.value = name;
     vacancyNode.value = vacancy;
     phoneNode.value = phone;
 
     const saveHandler = () => {
-        const newName = nameNode.value;
-        const newVacancy = vacancyNode.value;
-        const newPhone = phoneNode.value;
+        const newContact = {
+            name: nameNode.value,
+            vacancy: vacancyNode.value,
+            phone: phoneNode.value,
+        };
 
         const nameFirstLetter = name.charAt(0).toLowerCase();
-        const newNameFirstLetter = newName.charAt(0).toLowerCase();
+        const newNameFirstLetter = newContact.name.charAt(0).toLowerCase();
 
-        contact = { name: newName, vacancy: newVacancy, phone: newPhone };
+        const cardNode = document.getElementById(newNameFirstLetter);
 
-        if (nameFirstLetter === newNameFirstLetter) {
-            updateContact(contactNode, contact, id);
-        } else {
-            const cardNode = document.getElementById(newNameFirstLetter);
-            addContact(cardNode, newName, newVacancy, newPhone);
-            deleteContact(contactNode);
+        if (handleValidation(cardNode, newContact, true, phone)) {
+            if (nameFirstLetter === newNameFirstLetter) {
+                updateContact(contactNode, newContact, id);
+            } else {
+                addContact(cardNode, newContact);
+                deleteContact(contactNode);
+            }
+
+            closeModal('.modal--edit');
+            saveBtnNode.removeEventListener('click', saveHandler);
         }
-
-        saveBtnNode.removeEventListener('click', saveHandler);
-        closeModal('.modal--edit');
     };
 
     saveBtnNode.addEventListener('click', saveHandler);
