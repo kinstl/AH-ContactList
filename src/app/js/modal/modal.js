@@ -6,8 +6,6 @@ const overlayNode = document.querySelector('.modal__overlay');
 const bodyNode = document.querySelector('body');
 
 export function handleEditModal(id, contact, contactNode) {
-    openModal('.modal--edit');
-
     const { name, vacancy, phone } = contact;
 
     const saveBtnNode = document.querySelector('.modal--edit #js-edit-save');
@@ -47,20 +45,30 @@ export function handleEditModal(id, contact, contactNode) {
     };
 
     saveBtnNode.addEventListener('click', saveHandler);
+
+    openModal('.modal--edit', saveHandler);
 }
 
 export function handleSearchModal() {
-    openModal('.modal--search');
+    const searchAllBtnNode = document.querySelector(
+        '.modal--search #js-search-all',
+    );
+
+    const searchAllHandler = () => {
+        console.log(123);
+        searchAllBtnNode.removeEventListener('click', searchAllHandler);
+    };
+
+    searchAllBtnNode.addEventListener('click', searchAllHandler);
+
+    openModal('.modal--search', searchAllHandler);
 }
 
-overlayNode.addEventListener('click', () => {
-    closeModal();
-});
-
-function openModal(modalSelector) {
+function openModal(modalSelector, onSave) {
     const modalNode = document.querySelector(modalSelector);
     const modalCloseNode = modalNode.querySelector('.modal__close');
     const modalContentNode = modalNode.querySelector('.modal__content');
+    const modalButtonNode = modalNode.querySelector('.modal__button');
 
     overlayNode.classList.add('opened');
     modalNode.classList.add('opened');
@@ -89,6 +97,7 @@ function openModal(modalSelector) {
         modalCloseNode.removeEventListener('click', closeHandler);
         modalNode.removeEventListener('click', outsideClickHandler);
         document.removeEventListener('keydown', escKeyHandler);
+        modalButtonNode.removeEventListener('click', onSave);
     };
 
     modalCloseNode.addEventListener('click', closeHandler);
