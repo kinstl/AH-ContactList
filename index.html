@@ -215,41 +215,103 @@
             </div>
             <div class="modal__overlay"></div>
             <div class="modal modal--edit">
-                <div class="modal__content">
-                    <i
-                        class="fa-solid fa-xmark modal__close"
-                        aria-hidden="true"
-                    ></i>
-                    <h2 class="modal__title">Edit contact</h2>
-                    <div class="modal--edit__inputs">
-                        <input
-                            id="js-edit-name"
-                            type="text"
-                            class="input"
-                            placeholder="Name"
-                        />
-                        <input
-                            id="js-edit-vacancy"
-                            type="text"
-                            class="input"
-                            placeholder="Vacancy"
-                        />
-                        <input
-                            id="js-edit-phone"
-                            type="tel"
-                            class="input"
-                            placeholder="Phone"
-                        />
+                <div class="modal__wrapper">
+                    <div class="modal__content">
+                        <i
+                            class="fa-solid fa-xmark modal__close"
+                            aria-hidden="true"
+                        ></i>
+                        <h2 class="modal__title">Edit contact</h2>
+                        <div class="modal--edit__inputs">
+                            <input
+                                id="js-edit-name"
+                                type="text"
+                                class="input"
+                                placeholder="Name"
+                            />
+                            <input
+                                id="js-edit-vacancy"
+                                type="text"
+                                class="input"
+                                placeholder="Vacancy"
+                            />
+                            <input
+                                id="js-edit-phone"
+                                type="tel"
+                                class="input"
+                                placeholder="Phone"
+                            />
+                        </div>
+                        <button
+                            id="js-edit-save"
+                            class="button button--primary modal__button"
+                        >
+                            Save
+                        </button>
                     </div>
-                    <button
-                        id="js-edit-save"
-                        class="button button--primary modal__button"
-                    >
-                        Save
-                    </button>
                 </div>
             </div>
-            <div class="modal modal--search"></div>
+            <div class="modal modal--search">
+                <div class="modal__wrapper">
+                    <div class="modal__content">
+                        <i
+                            class="fa-solid fa-xmark modal__close"
+                            aria-hidden="true"
+                        ></i>
+                        <h2 class="modal__title">Search contacts</h2>
+                        <input
+                            id="js-search-input"
+                            type="text"
+                            class="input"
+                            placeholder="Search"
+                        />
+                        <div class="modal--search__contacts">
+                            <div
+                                class="contact"
+                                data-id="contact_1733565864447_7ed3yg1x3"
+                            >
+                                <p class="contact__text">
+                                    Name: sdf<br />
+                                    Vacancy: fsdfdsf<br />
+                                    Phone: +7 (000) 000-00-04
+                                </p>
+                                <i
+                                    class="fa-solid fa-pen js-contact-edit"
+                                    aria-hidden="true"
+                                ></i>
+                                <i
+                                    class="fa-solid fa-xmark js-contact-delete"
+                                    aria-hidden="true"
+                                ></i>
+                            </div>
+                            <div
+                                class="contact"
+                                data-id="contact_1733565864447_7ed3yg1x3"
+                            >
+                                <p class="contact__text">
+                                    Name: sdf<br />
+                                    Vacancy: fsdfdsf<br />
+                                    Phone: +7 (000) 000-00-04
+                                </p>
+                                <i
+                                    class="fa-solid fa-pen js-contact-edit"
+                                    aria-hidden="true"
+                                ></i>
+                                <i
+                                    class="fa-solid fa-xmark js-contact-delete"
+                                    aria-hidden="true"
+                                ></i>
+                            </div>
+                        </div>
+                        <button
+                            id="js-search-all"
+                            class="button button--primary modal__button"
+                        >
+                            Show All
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <script type="module" src="./src/app/js/main.js"></script>
     </body>

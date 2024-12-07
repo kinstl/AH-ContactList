@@ -3,6 +3,7 @@ import { initPhoneMask } from '../helpers/initPhoneMask';
 import { handleValidation } from '../helpers/validate';
 
 const overlayNode = document.querySelector('.modal__overlay');
+const bodyNode = document.querySelector('body');
 
 export function handleEditModal(id, contact, contactNode) {
     openModal('.modal--edit');
@@ -59,16 +60,40 @@ overlayNode.addEventListener('click', () => {
 function openModal(modalSelector) {
     const modalNode = document.querySelector(modalSelector);
     const modalCloseNode = modalNode.querySelector('.modal__close');
+    const modalContentNode = modalNode.querySelector('.modal__content');
 
     overlayNode.classList.add('opened');
     modalNode.classList.add('opened');
+    bodyNode.classList.add('no-scroll');
 
     const closeHandler = () => {
         closeModal(modalSelector);
+        cleanup();
+    };
+
+    const outsideClickHandler = (event) => {
+        if (!modalContentNode.contains(event.target)) {
+            closeModal(modalSelector);
+            cleanup();
+        }
+    };
+
+    const escKeyHandler = (event) => {
+        if (event.key === 'Escape') {
+            closeModal(modalSelector);
+            cleanup();
+        }
+    };
+
+    const cleanup = () => {
         modalCloseNode.removeEventListener('click', closeHandler);
+        modalNode.removeEventListener('click', outsideClickHandler);
+        document.removeEventListener('keydown', escKeyHandler);
     };
 
     modalCloseNode.addEventListener('click', closeHandler);
+    modalNode.addEventListener('click', (event) => outsideClickHandler(event));
+    document.addEventListener('keydown', escKeyHandler);
 }
 
 function closeModal(modalSelector = null) {
@@ -81,4 +106,5 @@ function closeModal(modalSelector = null) {
     }
 
     overlayNode.classList.remove('opened');
+    bodyNode.classList.remove('no-scroll');
 }

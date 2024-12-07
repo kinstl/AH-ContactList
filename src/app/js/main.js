@@ -4,10 +4,12 @@ import { clearInputs } from './helpers/clearInputs';
 import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
 import { initPhoneMask } from './helpers/initPhoneMask';
 import { handleValidation } from './helpers/validate';
+import { handleSearchModal } from './modal/modal';
 import { createContact, createInfoNode } from './view/view';
 
 const btnAddNode = document.getElementById('js-btn-add');
 const btnClearNode = document.getElementById('js-btn-clear');
+const btnSearchNode = document.getElementById('js-btn-search');
 const nameNode = document.getElementById('js-input-name');
 const vacancyNode = document.getElementById('js-input-vacancy');
 const phoneNode = document.getElementById('js-input-phone');
@@ -52,6 +54,10 @@ btnClearNode.addEventListener('click', () => {
     });
 
     localStorage.removeItem('contacts');
+});
+
+btnSearchNode.addEventListener('click', () => {
+    handleSearchModal();
 });
 
 contactsCardNodes.forEach((node) => {
