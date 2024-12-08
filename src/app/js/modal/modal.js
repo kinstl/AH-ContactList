@@ -1,6 +1,8 @@
 import { addContact, deleteContact, updateContact } from '../data/contact';
 import { getContactsFromLocalStorage } from '../data/localStorage';
 import { initPhoneMask } from '../helpers/initPhoneMask';
+import { normalizePhone } from '../helpers/normalizePhone';
+import { normalizeString } from '../helpers/normalizeString';
 import { handleValidation } from '../helpers/validate';
 import { createContact } from '../view/view';
 
@@ -65,33 +67,79 @@ export function handleSearchModal() {
     const contactsNode = document.querySelector(
         '.modal--search .modal--search__contacts',
     );
+    const searchInputNode = document.querySelector(
+        '.modal--search #js-search-input',
+    );
 
-    const searchAllHandler = () => {
+    const isContactInContainer = (contact) =>
+        !!contactsNode.querySelector(`.contact[data-id="${contact.id}"]`);
+
+    const renderContacts = (contacts) => {
+        contacts.forEach((contact) => {
+            if (!isContactInContainer(contact)) {
+                createContact(contactsNode, contact);
+            }
+        });
+        contactsNode.classList.add('filled');
+    };
+
+    const searchContacts = () => {
+        const searchQuery = normalizeString(searchInputNode.value);
         const contactsData = getContactsFromLocalStorage();
 
-        if (!contactsData || Object.keys(contactsData).length === 0) {
-            console.log('No contacts found.');
+        if (!searchQuery) {
+            contactsNode.innerHTML = '';
+            contactsNode.classList.remove('filled');
             return;
         }
 
-        for (const contacts of Object.values(contactsData)) {
-            contacts.forEach((contact) => {
-                createContact(contactsNode, contact);
-            });
+        const foundContacts = Object.values(contactsData).flatMap((contacts) =>
+            contacts.filter(
+                (contact) =>
+                    normalizeString(contact.name).includes(searchQuery) ||
+                    normalizeString(contact.vacancy).includes(searchQuery) ||
+                    normalizeString(contact.phone).includes(searchQuery) ||
+                    normalizePhone(contact.phone).includes(searchQuery),
+            ),
+        );
+
+        contactsNode.innerHTML = '';
+        if (foundContacts.length === 0) {
+            contactsNode.innerHTML = '<p>No matching contacts found.</p>';
+            return;
         }
 
-        contactsNode.classList.add('filled');
+        renderContacts(foundContacts);
+    };
+
+    const showAllContacts = () => {
+        const contactsData = getContactsFromLocalStorage();
+
+        if (!contactsData || Object.keys(contactsData).length === 0) {
+            contactsNode.classList.add('filled');
+            contactsNode.innerHTML = '<p>No contacts found.</p>';
+            return;
+        }
+
+        const allContacts = Object.values(contactsData).flat();
+        renderContacts(allContacts);
     };
 
     const closeHandler = () => {
         overlaySearchNode.classList.remove('opened');
         closeModal('.modal--search');
-        searchAllBtnNode.removeEventListener('click', searchAllHandler);
+
+        searchAllBtnNode.removeEventListener('click', showAllContacts);
+
+        searchInputNode.removeEventListener('input', searchContacts);
+        searchInputNode.value = '';
+
         contactsNode.classList.remove('filled');
         contactsNode.innerHTML = '';
     };
 
-    searchAllBtnNode.addEventListener('click', searchAllHandler);
+    searchAllBtnNode.addEventListener('click', showAllContacts);
+    searchInputNode.addEventListener('input', searchContacts);
 
     overlaySearchNode.classList.add('opened');
     openModal('.modal--search', closeHandler);

@@ -136,12 +136,14 @@
     }
 
     .modal--search__contacts {
-        display: none;
+        p {
+            color: var(--c-white);
+        }
 
         &.filled {
-            display: block;
-            padding: 20px;
             margin-top: 30px;
+            padding: 20px;
+            display: block;
             border-radius: 7px;
             max-height: 400px;
             overflow-y: auto;
