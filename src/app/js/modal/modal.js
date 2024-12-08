@@ -9,8 +9,8 @@ import { createContact } from '../view/view';
 const overlaySearchNode = document.querySelector('.modal__overlay--search');
 const bodyNode = document.querySelector('body');
 
-export function handleEditModal(id, contact, contactNode) {
-    const { name, vacancy, phone } = contact;
+export function handleEditModal(contact, contactNode, isSearch) {
+    const { name, vacancy, phone, id } = contact;
 
     const overlayEditNode = document.querySelector('.modal__overlay--edit');
     const saveBtnNode = document.querySelector('.modal--edit #js-edit-save');
@@ -26,6 +26,7 @@ export function handleEditModal(id, contact, contactNode) {
 
     const saveHandler = () => {
         const newContact = {
+            id,
             name: nameNode.value,
             vacancy: vacancyNode.value,
             phone: phoneNode.value,
@@ -38,10 +39,10 @@ export function handleEditModal(id, contact, contactNode) {
 
         if (handleValidation(cardNode, newContact, true, phone)) {
             if (nameFirstLetter === newNameFirstLetter) {
-                updateContact(contactNode, newContact, id);
+                updateContact(contactNode, newContact, isSearch);
             } else {
+                deleteContact(contactNode, isSearch);
                 addContact(cardNode, newContact);
-                deleteContact(contactNode);
             }
 
             closeHandler();
@@ -77,7 +78,7 @@ export function handleSearchModal() {
     const renderContacts = (contacts) => {
         contacts.forEach((contact) => {
             if (!isContactInContainer(contact)) {
-                createContact(contactsNode, contact);
+                createContact(contactsNode, contact, true);
             }
         });
         contactsNode.classList.add('filled');

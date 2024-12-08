@@ -1,34 +1,42 @@
 import { handleEditModal } from '../modal/modal';
-import { createContact, createInfoNode } from '../view/view';
 import {
+    createContact,
+    createInfoNode,
+    deleteContactFromMainLayout,
+    updateContactView,
+} from '../view/view';
+import {
+    deleteContactFromLocalStorage,
     getContactsFromLocalStorage,
     saveContactsToLocalStorage,
 } from './localStorage';
 
-export function saveContact(contactId, contact) {
-    const { name, vacancy, phone } = contact;
+export function saveContact(contact) {
+    const { name, vacancy, phone, id } = contact;
 
     const firstLetter = name.charAt(0).toLowerCase();
     const contactsData = getContactsFromLocalStorage();
+
+    for (const [letter, contacts] of Object.entries(contactsData)) {
+        const contactIndex = contacts.findIndex(
+            (existingContact) => existingContact.id === id,
+        );
+
+        if (contactIndex !== -1) {
+            contacts.splice(contactIndex, 1);
+
+            if (contacts.length === 0) {
+                delete contactsData[letter];
+            }
+            break;
+        }
+    }
 
     if (!contactsData[firstLetter]) {
         contactsData[firstLetter] = [];
     }
 
-    const contactIndex = contactsData[firstLetter].findIndex(
-        (contact) => contact.id === contactId,
-    );
-
-    if (contactIndex !== -1) {
-        contactsData[firstLetter][contactIndex] = {
-            id: contactId,
-            name,
-            vacancy,
-            phone,
-        };
-    } else {
-        contactsData[firstLetter].push({ id: contactId, name, vacancy, phone });
-    }
+    contactsData[firstLetter].push({ id, name, vacancy, phone });
 
     saveContactsToLocalStorage(contactsData);
 }
@@ -43,8 +51,8 @@ export function addContact(cardNode, contact) {
     const infoNode =
         cardNode.querySelector('.card__info') || createInfoNode(cardNode);
 
-    const contactId = createContact(infoNode, contact);
-    saveContact(contactId, contact);
+    createContact(infoNode, contact);
+    saveContact(contact);
 }
 
 export function getContact(contactId) {
@@ -60,56 +68,60 @@ export function getContact(contactId) {
     return null;
 }
 
-export function updateContact(contactNode, contact, id) {
-    const { name, vacancy, phone } = contact;
+export function updateContact(contactNode, contact, isSearch) {
+    if (isSearch) {
+        const contactsMainNodes =
+            document.querySelectorAll('.contacts .contact');
 
-    const contactTextNode = contactNode.querySelector('.contact__text');
-    contactTextNode.innerHTML = `
-        <p class="contact__text">
-            Name: ${name}<br/>
-            Vacancy: ${vacancy}<br/>
-            Phone: ${phone}
-        </p>
-        `;
+        contactsMainNodes.forEach((contactMainNode) => {
+            const contactMainId = contactMainNode.dataset.id;
 
-    saveContact(id, contact);
+            if (contactMainId === contact.id) {
+                updateContactView(contact, contactMainNode);
+            }
+        });
+    }
+
+    updateContactView(contact, contactNode);
+
+    saveContact(contact);
 }
 
-export function editContact(id, contactNode) {
-    const contact = getContact(id);
+export function editContact(contactNode, isSearch) {
+    const contact = getContact(contactNode.dataset.id);
 
-    handleEditModal(id, contact, contactNode);
+    handleEditModal(contact, contactNode, isSearch);
 }
 
-export function deleteContact(contactNode) {
+export function deleteContact(contactNode, isSearch = false) {
     const contactId = contactNode.dataset.id;
-    const cardNode = contactNode.closest('.contacts__card');
-    const numNode = cardNode.querySelector('.card__num');
 
-    const currentValue = parseInt(numNode.innerText, 10) || 0;
-
-    const firstLetter = cardNode.id;
-
-    const contactsData = getContactsFromLocalStorage();
-
-    contactNode.remove();
-
-    if (contactsData[firstLetter]) {
-        contactsData[firstLetter] = contactsData[firstLetter].filter(
-            (contact) => contact.id !== contactId,
+    if (isSearch) {
+        const contactsContainerNode = document.querySelector(
+            '.modal--search__contacts',
         );
+        const contactsMainNodes =
+            document.querySelectorAll('.contacts .contact');
 
-        if (contactsData[firstLetter].length === 0) {
-            delete contactsData[firstLetter];
+        contactsMainNodes.forEach((contactMainNode) => {
+            const contactMainId = contactMainNode.dataset.id;
+
+            if (contactMainId === contactId) {
+                deleteContactFromMainLayout(contactMainNode);
+            }
+        });
+
+        contactNode.remove();
+
+        if (
+            contactsContainerNode &&
+            contactsContainerNode.childElementCount === 0
+        ) {
+            contactsContainerNode.classList.remove('filled');
         }
-
-        saveContactsToLocalStorage(contactsData);
-    }
-
-    if (currentValue <= 1) {
-        numNode.innerText = '';
-        cardNode.classList.remove('filled', 'show');
     } else {
-        numNode.innerText = currentValue - 1;
+        deleteContactFromMainLayout(contactNode);
     }
+
+    deleteContactFromLocalStorage(contactId);
 }
