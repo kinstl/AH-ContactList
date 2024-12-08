@@ -4,12 +4,13 @@ import { initPhoneMask } from '../helpers/initPhoneMask';
 import { handleValidation } from '../helpers/validate';
 import { createContact } from '../view/view';
 
-const overlayNode = document.querySelector('.modal__overlay');
+const overlaySearchNode = document.querySelector('.modal__overlay--search');
 const bodyNode = document.querySelector('body');
 
 export function handleEditModal(id, contact, contactNode) {
     const { name, vacancy, phone } = contact;
 
+    const overlayEditNode = document.querySelector('.modal__overlay--edit');
     const saveBtnNode = document.querySelector('.modal--edit #js-edit-save');
     const nameNode = document.querySelector('.modal--edit #js-edit-name');
     const vacancyNode = document.querySelector('.modal--edit #js-edit-vacancy');
@@ -41,14 +42,20 @@ export function handleEditModal(id, contact, contactNode) {
                 deleteContact(contactNode);
             }
 
-            closeModal('.modal--edit');
-            saveBtnNode.removeEventListener('click', saveHandler);
+            closeHandler();
         }
     };
 
     saveBtnNode.addEventListener('click', saveHandler);
 
-    openModal('.modal--edit', saveHandler);
+    const closeHandler = () => {
+        overlayEditNode.classList.remove('opened');
+        closeModal('.modal--edit');
+        saveBtnNode.removeEventListener('click', saveHandler);
+    };
+
+    overlayEditNode.classList.add('opened');
+    openModal('.modal--edit', closeHandler);
 }
 
 export function handleSearchModal() {
@@ -62,6 +69,11 @@ export function handleSearchModal() {
     const searchAllHandler = () => {
         const contactsData = getContactsFromLocalStorage();
 
+        if (!contactsData || Object.keys(contactsData).length === 0) {
+            console.log('No contacts found.');
+            return;
+        }
+
         for (const contacts of Object.values(contactsData)) {
             contacts.forEach((contact) => {
                 createContact(contactsNode, contact);
@@ -71,48 +83,52 @@ export function handleSearchModal() {
         contactsNode.classList.add('filled');
     };
 
+    const closeHandler = () => {
+        overlaySearchNode.classList.remove('opened');
+        closeModal('.modal--search');
+        searchAllBtnNode.removeEventListener('click', searchAllHandler);
+        contactsNode.classList.remove('filled');
+        contactsNode.innerHTML = '';
+    };
+
     searchAllBtnNode.addEventListener('click', searchAllHandler);
 
-    openModal('.modal--search', searchAllHandler);
+    overlaySearchNode.classList.add('opened');
+    openModal('.modal--search', closeHandler);
 }
 
-function openModal(modalSelector, onSave) {
+function openModal(modalSelector, onClose) {
     const modalNode = document.querySelector(modalSelector);
     const modalCloseNode = modalNode.querySelector('.modal__close');
     const modalContentNode = modalNode.querySelector('.modal__content');
-    const modalButtonNode = modalNode.querySelector('.modal__button');
 
-    overlayNode.classList.add('opened');
     modalNode.classList.add('opened');
     bodyNode.classList.add('no-scroll');
 
-    const closeHandler = () => {
-        closeModal(modalSelector);
-        cleanup();
+    const btnCloseHandler = () => {
+        closeHandler();
     };
 
     const outsideClickHandler = (event) => {
         if (!modalContentNode.contains(event.target)) {
-            closeModal(modalSelector);
-            cleanup();
+            closeHandler();
         }
     };
 
     const escKeyHandler = (event) => {
         if (event.key === 'Escape') {
-            closeModal(modalSelector);
-            cleanup();
+            closeHandler();
         }
     };
 
-    const cleanup = () => {
-        modalCloseNode.removeEventListener('click', closeHandler);
+    const closeHandler = () => {
+        modalCloseNode.removeEventListener('click', btnCloseHandler);
         modalNode.removeEventListener('click', outsideClickHandler);
         document.removeEventListener('keydown', escKeyHandler);
-        modalButtonNode.removeEventListener('click', onSave);
+        onClose();
     };
 
-    modalCloseNode.addEventListener('click', closeHandler);
+    modalCloseNode.addEventListener('click', btnCloseHandler);
     modalNode.addEventListener('click', (event) => outsideClickHandler(event));
     document.addEventListener('keydown', escKeyHandler);
 }
@@ -126,6 +142,5 @@ function closeModal(modalSelector = null) {
         openedModals.forEach((modal) => modal.classList.remove('opened'));
     }
 
-    overlayNode.classList.remove('opened');
     bodyNode.classList.remove('no-scroll');
 }

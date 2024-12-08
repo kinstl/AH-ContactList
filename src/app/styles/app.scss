@@ -123,6 +123,13 @@
     }
 }
 
+.modal__overlay {
+    &.modal__overlay--edit.opened {
+        // opacity: 0.75;
+        z-index: 101;
+    }
+}
+
 .modal--search {
     .input {
         max-width: unset;
@@ -184,13 +191,19 @@
     }
 }
 
-.modal--edit {
-    .modal--edit__inputs {
-        display: flex;
-        gap: 10px;
+.modal {
+    &.modal--edit {
+        .modal--edit__inputs {
+            display: flex;
+            gap: 10px;
 
-        .input {
-            max-width: unset;
+            .input {
+                max-width: unset;
+            }
+        }
+
+        &.opened {
+            z-index: 102;
         }
     }
 }
