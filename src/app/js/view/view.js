@@ -7,19 +7,12 @@ export function createInfoNode(cardNode) {
     return newInfoNode;
 }
 
-export function createContact(
+export function createContactView(
     contactsContainerNode,
     contact,
     isSearch = false,
 ) {
-    const { name, vacancy, phone } = contact;
-
-    let id = contact.id;
-
-    if (!id) {
-        id = `contact_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-        contact.id = id;
-    }
+    const { name, vacancy, phone, id } = contact;
 
     const newContactNode = document.createElement('div');
     newContactNode.classList.add('contact');
@@ -50,8 +43,6 @@ export function createContact(
         });
 
     contactsContainerNode.append(newContactNode);
-
-    return id;
 }
 
 export function deleteContactFromMainLayout(contactNode) {
@@ -81,4 +72,10 @@ export function updateContactView(contact, contactNode) {
             Phone: ${phone}
         </p>
         `;
+}
+
+export function increaseCounterView(cardNode) {
+    const numNode = cardNode.querySelector('.card__num');
+    const currentValue = parseInt(numNode.innerText, 10) || 0;
+    numNode.innerText = currentValue + 1;
 }

@@ -1,8 +1,9 @@
 import { handleEditModal } from '../modal/modal';
 import {
-    createContact,
+    createContactView,
     createInfoNode,
     deleteContactFromMainLayout,
+    increaseCounterView,
     updateContactView,
 } from '../view/view';
 import {
@@ -42,16 +43,16 @@ export function saveContact(contact) {
 }
 
 export function addContact(cardNode, contact) {
-    cardNode.classList.add('filled');
-
-    const numNode = cardNode.querySelector('.card__num');
-    const currentValue = parseInt(numNode.innerText, 10) || 0;
-    numNode.innerText = currentValue + 1;
-
     const infoNode =
         cardNode.querySelector('.card__info') || createInfoNode(cardNode);
 
-    createContact(infoNode, contact);
+    cardNode.classList.add('filled');
+
+    increaseCounterView(cardNode);
+
+    contact.id = addIdToContact(contact.id);
+
+    createContactView(infoNode, contact);
     saveContact(contact);
 }
 
@@ -66,6 +67,34 @@ export function getContact(contactId) {
     }
 
     return null;
+}
+
+export function loadContacts() {
+    const contactsData = getContactsFromLocalStorage();
+
+    for (const [letter, contacts] of Object.entries(contactsData)) {
+        const cardNode = document.getElementById(letter);
+
+        if (cardNode) {
+            cardNode.classList.add('filled');
+
+            const infoNode =
+                cardNode.querySelector('.card__info') ||
+                createInfoNode(cardNode);
+
+            contacts.forEach((contact) => {
+                createContactView(infoNode, contact);
+            });
+
+            const numNode = cardNode.querySelector('.card__num');
+
+            if (contacts.length) {
+                numNode.innerText = contacts.length;
+            } else {
+                numNode.innerText = '';
+            }
+        }
+    }
 }
 
 export function updateContact(contactNode, contact, isSearch) {
@@ -124,4 +153,13 @@ export function deleteContact(contactNode, isSearch = false) {
     }
 
     deleteContactFromLocalStorage(contactId);
+}
+
+function addIdToContact(contactId) {
+    if (!contactId) {
+        const id = `contact_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+        return id;
+    } else {
+        return contactId;
+    }
 }
