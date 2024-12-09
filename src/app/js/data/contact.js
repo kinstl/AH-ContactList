@@ -1,4 +1,4 @@
-import { handleEditModal } from '../modal/modal';
+import { handleEditModal } from '../modal/handleEditModal';
 import {
     createContactView,
     createInfoNode,

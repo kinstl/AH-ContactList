@@ -3,7 +3,7 @@ import { clearInputs } from './helpers/clearInputs';
 import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
 import { initPhoneMask } from './helpers/initPhoneMask';
 import { handleValidation } from './helpers/validate';
-import { handleSearchModal } from './modal/modal';
+import { handleSearchModal } from './modal/handleSearchModal';
 
 const btnAddNode = document.getElementById('js-btn-add');
 const btnClearNode = document.getElementById('js-btn-clear');
