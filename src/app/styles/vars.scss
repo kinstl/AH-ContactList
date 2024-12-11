@@ -14,4 +14,12 @@
     --fz-m: var(--fz);
     --fz-s: calc(var(--fz) - 2px); // 18px
     --fz-contact: 14px;
+
+    @media (max-width: 1200px) {
+        --fz: 18px;
+    }
+
+    @media (max-width: 768px) {
+        --fz: 16px;
+    }
 }

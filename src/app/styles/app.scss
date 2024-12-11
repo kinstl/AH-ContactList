@@ -1,6 +1,11 @@
 .app-title {
     margin-top: 50px;
     text-align: center;
+
+    @media (max-width: 576px) {
+        margin-top: 30px;
+        font-size: 26px;
+    }
 }
 
 .control {
@@ -14,19 +19,42 @@
         display: flex;
         gap: 15px;
     }
+
+    .control__buttons,
+    .control__buttons-group {
+        display: flex;
+        gap: 5px;
+    }
+
+    @media (max-width: 576px) {
+        margin-top: 20px;
+        gap: 10px;
+
+        .control__inputs {
+            width: 100%;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .control__buttons {
+            width: 100%;
+            flex-direction: column;
+        }
+    }
 }
 
 .contacts {
     margin-top: 50px;
-    width: 100%;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+    margin-bottom: 50px;
     position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 
     .contacts__card {
         position: relative;
-        width: 255px;
+        width: 100%;
         height: 45px;
         color: var(--c-primary);
 
@@ -121,91 +149,19 @@
             }
         }
     }
-}
 
-.modal__overlay {
-    &.modal__overlay--edit.opened {
-        // opacity: 0.75;
-        z-index: 101;
-    }
-}
-
-.modal--search {
-    .input {
-        max-width: unset;
+    @media (max-width: 1200px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
     }
 
-    .modal--search__contacts {
-        p {
-            color: var(--c-white);
-        }
-
-        &.filled {
-            margin-top: 30px;
-            padding: 20px;
-            display: block;
-            border-radius: 7px;
-            max-height: 400px;
-            overflow-y: auto;
-            background-color: var(--c-primary);
-        }
-
-        .contact {
-            position: relative;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--c-white);
-
-            &:first-child {
-                padding-top: 0;
-                padding-bottom: 10px;
-            }
-
-            &:last-child {
-                border-bottom: unset;
-                padding-bottom: 0;
-            }
-
-            .contact__text {
-                font-size: var(--fz-contact);
-                color: var(--c-white);
-            }
-
-            i {
-                position: absolute;
-                top: 10px;
-                color: var(--c-white);
-                cursor: pointer;
-
-                &.fa-pen {
-                    right: 20px;
-                    top: 11px;
-                    font-size: 10px;
-                }
-
-                &.fa-xmark {
-                    right: 0;
-                    top: 9px;
-                    font-size: 14px;
-                }
-            }
-        }
+    @media (max-width: 850px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
-}
 
-.modal {
-    &.modal--edit {
-        .modal--edit__inputs {
-            display: flex;
-            gap: 10px;
-
-            .input {
-                max-width: unset;
-            }
-        }
-
-        &.opened {
-            z-index: 102;
-        }
+    @media (max-width: 576px) {
+        margin-top: 30px;
+        grid-template-columns: 1fr;
     }
 }

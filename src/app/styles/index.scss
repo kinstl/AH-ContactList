@@ -40,6 +40,11 @@ body {
     height: 60px;
     border-radius: 7px;
     background-color: var(--c-gray-light);
+
+    @media (max-width: 576px) {
+        max-width: unset;
+        height: 50px;
+    }
 }
 
 .button {
@@ -70,6 +75,10 @@ body {
             color: var(--c-white);
         }
     }
+
+    @media (max-width: 576px) {
+        width: 100%;
+    }
 }
 
 .modal__overlay {
@@ -92,10 +101,14 @@ body {
         opacity: 0.75;
         z-index: 99;
     }
+
+    &.modal__overlay--edit.opened {
+        z-index: 101;
+    }
 }
 
 .modal {
-    padding: 20px 0;
+    padding: 20px;
     position: fixed;
     top: 0;
     left: 0;
@@ -108,7 +121,8 @@ body {
     z-index: -1;
 
     .modal__wrapper {
-        width: 800px;
+        max-width: 800px;
+        width: 100%;
         margin: 0 auto;
         min-height: calc(100% - 40px);
         display: flex;
@@ -147,6 +161,92 @@ body {
         .modal__wrapper {
             .modal__content {
                 transform: scale(1);
+            }
+        }
+    }
+
+    &.modal--search {
+        .input {
+            max-width: unset;
+        }
+
+        .modal--search__contacts {
+            p {
+                color: var(--c-white);
+            }
+
+            &.filled {
+                margin-top: 30px;
+                padding: 20px;
+                display: block;
+                border-radius: 7px;
+                max-height: 400px;
+                overflow-y: auto;
+                background-color: var(--c-primary);
+            }
+
+            .contact {
+                position: relative;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid var(--c-white);
+
+                &:first-child {
+                    padding-top: 0;
+                    padding-bottom: 10px;
+                }
+
+                &:last-child {
+                    border-bottom: unset;
+                    padding-bottom: 0;
+                }
+
+                .contact__text {
+                    font-size: var(--fz-contact);
+                    color: var(--c-white);
+                }
+
+                i {
+                    position: absolute;
+                    top: 10px;
+                    color: var(--c-white);
+                    cursor: pointer;
+
+                    &.fa-pen {
+                        right: 20px;
+                        top: 11px;
+                        font-size: 10px;
+                    }
+
+                    &.fa-xmark {
+                        right: 0;
+                        top: 9px;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+
+    &.modal--edit {
+        .modal--edit__inputs {
+            display: flex;
+            gap: 10px;
+
+            .input {
+                max-width: unset;
+            }
+        }
+
+        &.opened {
+            z-index: 102;
+        }
+    }
+
+    @media (max-width: 576px) {
+        &.modal--edit {
+            .modal--edit__inputs {
+                flex-direction: column;
             }
         }
     }
