@@ -1,12 +1,13 @@
 import { getContactsFromLocalStorage } from '../data/localStorage';
+import type { ContactsData, IContact } from '../types/contact';
 
 function validate(
-    cardNode,
-    name,
-    vacancy,
-    phone,
-    isEditing = false,
-    currentPhone = '',
+    cardNode: HTMLDivElement | undefined,
+    name: string,
+    vacancy: string,
+    phone: string,
+    isEditing: boolean,
+    currentPhone: string,
 ) {
     const result = {
         status: true,
@@ -46,9 +47,10 @@ function validate(
     }
 
     if (!isEditing || phone !== currentPhone) {
-        const contactsData = getContactsFromLocalStorage();
+        const contactsData: ContactsData = getContactsFromLocalStorage();
+
         for (const contacts of Object.values(contactsData)) {
-            if (contacts.some((contact) => contact.phone === phone)) {
+            if (contacts.some((contact: IContact) => contact.phone === phone)) {
                 result.status = false;
                 result.message =
                     'A contact with this phone number already exists!';
@@ -60,7 +62,12 @@ function validate(
     return result;
 }
 
-export function handleValidation(cardNode, contact, isEditing, currentPhone) {
+export function handleValidation(
+    cardNode: HTMLDivElement | undefined,
+    contact: IContact,
+    isEditing: boolean = false,
+    currentPhone: string = '',
+) {
     const { name, vacancy, phone } = contact;
 
     const validationResult = validate(

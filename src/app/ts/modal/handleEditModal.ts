@@ -1,16 +1,31 @@
 import { addContact, deleteContact, updateContact } from '../data/contact';
 import { initPhoneMask } from '../helpers/initPhoneMask';
 import { handleValidation } from '../helpers/validate';
+import type { IContact } from '../types/contact';
 import { closeModal, openModal } from './modal';
 
-export function handleEditModal(contact, contactNode, isSearch) {
+export function handleEditModal(
+    contact: IContact,
+    contactNode: HTMLDivElement,
+    isSearch: boolean,
+) {
     const { name, vacancy, phone, id } = contact;
 
-    const overlayEditNode = document.querySelector('.modal__overlay--edit');
-    const saveBtnNode = document.querySelector('.modal--edit #js-edit-save');
-    const nameNode = document.querySelector('.modal--edit #js-edit-name');
-    const vacancyNode = document.querySelector('.modal--edit #js-edit-vacancy');
-    const phoneNode = document.querySelector('.modal--edit #js-edit-phone');
+    const overlayEditNode = document.querySelector(
+        '.modal__overlay--edit',
+    ) as HTMLDivElement;
+    const saveBtnNode = document.querySelector(
+        '.modal--edit #js-edit-save',
+    ) as HTMLButtonElement;
+    const nameNode = document.querySelector(
+        '.modal--edit #js-edit-name',
+    ) as HTMLInputElement;
+    const vacancyNode = document.querySelector(
+        '.modal--edit #js-edit-vacancy',
+    ) as HTMLInputElement;
+    const phoneNode = document.querySelector(
+        '.modal--edit #js-edit-phone',
+    ) as HTMLInputElement;
 
     initPhoneMask(phoneNode);
 
@@ -29,7 +44,9 @@ export function handleEditModal(contact, contactNode, isSearch) {
         const nameFirstLetter = name.charAt(0).toLowerCase();
         const newNameFirstLetter = newContact.name.charAt(0).toLowerCase();
 
-        const cardNode = document.getElementById(newNameFirstLetter);
+        const cardNode = document.getElementById(
+            newNameFirstLetter,
+        ) as HTMLDivElement;
 
         if (handleValidation(cardNode, newContact, true, phone)) {
             if (nameFirstLetter === newNameFirstLetter) {

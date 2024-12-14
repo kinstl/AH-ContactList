@@ -4,33 +4,22 @@ import { initContactsCardZIndex } from './helpers/initContactsCardZIndex';
 import { initPhoneMask } from './helpers/initPhoneMask';
 import { handleValidation } from './helpers/validate';
 import { handleSearchModal } from './modal/handleSearchModal';
+import type { IContact } from './types/contact';
 
-const btnAddNode = document.getElementById(
-    'js-btn-add',
-) as HTMLButtonElement | null;
+const btnAddNode = document.getElementById('js-btn-add') as HTMLButtonElement;
 const btnClearNode = document.getElementById(
     'js-btn-clear',
-) as HTMLButtonElement | null;
+) as HTMLButtonElement;
 const btnSearchNode = document.getElementById(
     'js-btn-search',
-) as HTMLButtonElement | null;
-const nameNode = document.getElementById(
-    'js-input-name',
-) as HTMLInputElement | null;
+) as HTMLButtonElement;
+const nameNode = document.getElementById('js-input-name') as HTMLInputElement;
 const vacancyNode = document.getElementById(
     'js-input-vacancy',
-) as HTMLInputElement | null;
-const phoneNode = document.getElementById(
-    'js-input-phone',
-) as HTMLInputElement | null;
+) as HTMLInputElement;
+const phoneNode = document.getElementById('js-input-phone') as HTMLInputElement;
 const contactsCardNodes =
-    document.querySelectorAll<HTMLElement>('.contacts__card');
-
-interface IContact {
-    name: string;
-    vacancy: string;
-    phone: string;
-}
+    document.querySelectorAll<HTMLDivElement>('.contacts__card');
 
 loadContacts();
 initPhoneMask(phoneNode);
@@ -43,6 +32,7 @@ btnAddNode?.addEventListener('click', () => {
     }
 
     const contact: IContact = {
+        id: undefined,
         name: nameNode.value,
         vacancy: vacancyNode.value,
         phone: phoneNode.value,
@@ -58,6 +48,11 @@ btnAddNode?.addEventListener('click', () => {
         return;
     }
 
+    if (!targetCard) {
+        console.error('No target card found');
+        return;
+    }
+
     addContact(targetCard, contact);
 
     clearInputs(nameNode, vacancyNode, phoneNode);
@@ -65,10 +60,8 @@ btnAddNode?.addEventListener('click', () => {
 
 btnClearNode?.addEventListener('click', () => {
     contactsCardNodes.forEach((node) => {
-        const infoNode = node.querySelector(
-            '.card__info',
-        ) as HTMLElement | null;
-        const numNode = node.querySelector('.card__num') as HTMLElement | null;
+        const infoNode = node.querySelector('.card__info') as HTMLElement;
+        const numNode = node.querySelector('.card__num') as HTMLElement;
 
         if (infoNode && numNode) {
             infoNode.remove();
@@ -85,7 +78,9 @@ btnSearchNode?.addEventListener('click', () => {
 });
 
 contactsCardNodes.forEach((node) => {
-    const cardContainerNode = node.querySelector('.card__container');
+    const cardContainerNode = node.querySelector(
+        '.card__container',
+    ) as HTMLElement;
     cardContainerNode?.addEventListener('click', () => {
         node.classList.toggle('show');
     });

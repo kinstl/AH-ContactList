@@ -1,6 +1,5 @@
-export function initPhoneMask(input) {
-    input.addEventListener('input', (e) => {
-        const input = e.target;
+export function initPhoneMask(input: HTMLInputElement) {
+    input.addEventListener('input', () => {
         const cursorPosition = input.selectionStart;
         let value = input.value.replace(/\D/g, '');
 
@@ -20,12 +19,14 @@ export function initPhoneMask(input) {
         const nextLength = input.value.length;
         const diff = nextLength - prevLength;
 
-        input.selectionStart = input.selectionEnd = cursorPosition + diff;
+        if (cursorPosition) {
+            input.selectionStart = input.selectionEnd = cursorPosition + diff;
+        }
     });
 
-    input.addEventListener('blur', (e) => {
-        if (e.target.value === '+7') {
-            e.target.value = '';
+    input.addEventListener('blur', () => {
+        if (input.value === '+7') {
+            input.value = '';
         }
     });
 }

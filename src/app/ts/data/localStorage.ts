@@ -1,12 +1,15 @@
-export function saveContactsToLocalStorage(contactsData) {
+import type { ContactsData } from '../types/contact';
+
+export function saveContactsToLocalStorage(contactsData: ContactsData): void {
     localStorage.setItem('contacts', JSON.stringify(contactsData));
 }
 
-export function getContactsFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('contacts')) || {};
+export function getContactsFromLocalStorage(): ContactsData {
+    const contacts = localStorage.getItem('contacts') || '{}';
+    return JSON.parse(contacts) as ContactsData;
 }
 
-export function deleteContactFromLocalStorage(contactId) {
+export function deleteContactFromLocalStorage(contactId: string): void {
     const contactsData = getContactsFromLocalStorage();
 
     for (const [letter, contacts] of Object.entries(contactsData)) {

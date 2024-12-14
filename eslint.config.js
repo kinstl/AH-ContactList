@@ -1,14 +1,36 @@
 import globals from 'globals';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
+import eslintPluginTypescript from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
 
 export default [
     {
-        languageOptions: { globals: globals.browser },
+        languageOptions: {
+            globals: globals.browser,
+            parser: typescriptParser,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: 'module',
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                project: './tsconfig.json',
+            },
+        },
         plugins: {
             eslintPluginPrettier,
+            '@typescript-eslint': eslintPluginTypescript,
         },
-        files: ['**/*.js'],
+        files: ['**/*.{js,jsx,ts,tsx}'],
         rules: {
+            '@typescript-eslint/no-unused-vars': [
+                'warn',
+                { argsIgnorePattern: '^_' },
+            ],
+            '@typescript-eslint/no-shadow': 'off',
+            '@typescript-eslint/no-explicit-any': 'warn',
+            '@typescript-eslint/explicit-function-return-type': 'off',
+            '@typescript-eslint/consistent-type-imports': 'warn',
             'import/no-unresolved': 'off',
             'import/prefer-default-export': 'off',
             'implicit-arrow-linebreak': 'off',
@@ -25,6 +47,11 @@ export default [
             'no-unused-vars': 'warn',
             'eol-last': 'off',
         },
-        ignores: ['src/app/js/plugins/*', 'dist/**/*'],
+        ignores: [
+            'eslint.config.js',
+            'src/app/js/plugins/*',
+            'dist/**/*',
+            'node_modules/',
+        ],
     },
 ];

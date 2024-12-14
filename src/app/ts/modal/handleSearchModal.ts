@@ -1,6 +1,7 @@
 import { getContactsFromLocalStorage } from '../data/localStorage';
 import { normalizePhone } from '../helpers/normalizePhone';
 import { normalizeString } from '../helpers/normalizeString';
+import type { IContact } from '../types/contact';
 import { createContactView } from '../view/view';
 import { closeModal, openModal } from './modal';
 
@@ -9,24 +10,24 @@ const overlaySearchNode = document.querySelector('.modal__overlay--search');
 export function handleSearchModal() {
     const searchAllBtnNode = document.querySelector(
         '.modal--search #js-search-all',
-    );
+    ) as HTMLButtonElement;
     const contactsNode = document.querySelector(
         '.modal--search .modal--search__contacts',
-    );
+    ) as HTMLDivElement;
     const searchInputNode = document.querySelector(
         '.modal--search #js-search-input',
-    );
+    ) as HTMLInputElement;
 
-    const isContactInContainer = (contact) =>
-        !!contactsNode.querySelector(`.contact[data-id="${contact.id}"]`);
+    const isContactInContainer = (contact: IContact) =>
+        !!contactsNode?.querySelector(`.contact[data-id="${contact.id}"]`);
 
-    const renderContacts = (contacts) => {
+    const renderContacts = (contacts: IContact[]) => {
         contacts.forEach((contact) => {
             if (!isContactInContainer(contact)) {
                 createContactView(contactsNode, contact, true);
             }
         });
-        contactsNode.classList.add('filled');
+        contactsNode?.classList.add('filled');
     };
 
     const searchContacts = () => {
@@ -72,12 +73,12 @@ export function handleSearchModal() {
     };
 
     const closeHandler = () => {
-        overlaySearchNode.classList.remove('opened');
+        overlaySearchNode?.classList.remove('opened');
         closeModal('.modal--search');
 
-        searchAllBtnNode.removeEventListener('click', showAllContacts);
+        searchAllBtnNode?.removeEventListener('click', showAllContacts);
 
-        searchInputNode.removeEventListener('input', searchContacts);
+        searchInputNode?.removeEventListener('input', searchContacts);
         searchInputNode.value = '';
 
         contactsNode.classList.remove('filled');
@@ -87,6 +88,6 @@ export function handleSearchModal() {
     searchAllBtnNode.addEventListener('click', showAllContacts);
     searchInputNode.addEventListener('input', searchContacts);
 
-    overlaySearchNode.classList.add('opened');
+    overlaySearchNode?.classList.add('opened');
     openModal('.modal--search', closeHandler);
 }
