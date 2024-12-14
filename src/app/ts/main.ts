@@ -48,12 +48,7 @@ btnAddNode?.addEventListener('click', () => {
         return;
     }
 
-    if (!targetCard) {
-        console.error('No target card found');
-        return;
-    }
-
-    addContact(targetCard, contact);
+    addContact(targetCard as HTMLDivElement, contact);
 
     clearInputs(nameNode, vacancyNode, phoneNode);
 });

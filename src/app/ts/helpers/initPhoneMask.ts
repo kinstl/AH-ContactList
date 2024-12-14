@@ -1,4 +1,4 @@
-export function initPhoneMask(input: HTMLInputElement) {
+export function initPhoneMask(input: HTMLInputElement): void {
     input.addEventListener('input', () => {
         const cursorPosition = input.selectionStart;
         let value = input.value.replace(/\D/g, '');

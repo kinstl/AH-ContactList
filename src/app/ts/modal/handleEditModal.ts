@@ -8,7 +8,7 @@ export function handleEditModal(
     contact: IContact,
     contactNode: HTMLDivElement,
     isSearch: boolean,
-) {
+): void {
     const { name, vacancy, phone, id } = contact;
 
     const overlayEditNode = document.querySelector(

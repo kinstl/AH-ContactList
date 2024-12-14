@@ -1,3 +1,3 @@
-export function clearInputs(...node: HTMLInputElement[]) {
+export function clearInputs(...node: HTMLInputElement[]): void {
     node.forEach((input) => (input.value = ''));
 }

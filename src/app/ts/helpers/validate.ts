@@ -1,5 +1,6 @@
 import { getContactsFromLocalStorage } from '../data/localStorage';
 import type { ContactsData, IContact } from '../types/contact';
+import type { IValidationResult } from '../types/validationResult';
 
 function validate(
     cardNode: HTMLDivElement | undefined,
@@ -8,8 +9,8 @@ function validate(
     phone: string,
     isEditing: boolean,
     currentPhone: string,
-) {
-    const result = {
+): IValidationResult {
+    const result: IValidationResult = {
         status: true,
         message: '',
     };

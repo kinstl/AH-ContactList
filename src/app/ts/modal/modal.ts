@@ -1,6 +1,6 @@
 const bodyNode = document.querySelector('body') as HTMLBodyElement;
 
-export function openModal(modalSelector: string, onClose: () => void) {
+export function openModal(modalSelector: string, onClose: () => void): void {
     const modalNode = document.querySelector(modalSelector);
     const modalCloseNode = modalNode?.querySelector('.modal__close');
     const modalContentNode = modalNode?.querySelector('.modal__content');
@@ -36,7 +36,7 @@ export function openModal(modalSelector: string, onClose: () => void) {
     document.addEventListener('keydown', escKeyHandler);
 }
 
-export function closeModal(modalSelector: string = '') {
+export function closeModal(modalSelector: string = ''): void {
     if (modalSelector) {
         const modalNode = document.querySelector(modalSelector);
         modalNode?.classList.remove('opened');

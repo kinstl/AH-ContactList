@@ -7,7 +7,7 @@ import { closeModal, openModal } from './modal';
 
 const overlaySearchNode = document.querySelector('.modal__overlay--search');
 
-export function handleSearchModal() {
+export function handleSearchModal(): void {
     const searchAllBtnNode = document.querySelector(
         '.modal--search #js-search-all',
     ) as HTMLButtonElement;
@@ -52,6 +52,7 @@ export function handleSearchModal() {
 
         contactsNode.innerHTML = '';
         if (foundContacts.length === 0) {
+            contactsNode.classList.add('filled');
             contactsNode.innerHTML = '<p>No matching contacts found.</p>';
             return;
         }
