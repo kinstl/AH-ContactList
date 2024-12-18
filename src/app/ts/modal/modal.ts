@@ -13,15 +13,11 @@ export function openModal(modalSelector: string, onClose: () => void): void {
     };
 
     const outsideClickHandler = (event: Event) => {
-        if (!modalContentNode?.contains(event.target as Node)) {
-            closeHandler();
-        }
+        if (!modalContentNode?.contains(event.target as Node)) closeHandler();
     };
 
     const escKeyHandler = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-            closeHandler();
-        }
+        if (event.key === 'Escape') closeHandler();
     };
 
     const closeHandler = () => {
@@ -36,7 +32,7 @@ export function openModal(modalSelector: string, onClose: () => void): void {
     document.addEventListener('keydown', escKeyHandler);
 }
 
-export function closeModal(modalSelector: string = ''): void {
+export function closeModal(modalSelector: string): void {
     if (modalSelector) {
         const modalNode = document.querySelector(modalSelector);
         modalNode?.classList.remove('opened');

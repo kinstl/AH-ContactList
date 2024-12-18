@@ -21,7 +21,7 @@ export default [
             eslintPluginPrettier,
             '@typescript-eslint': eslintPluginTypescript,
         },
-        files: ['**/*.{js,jsx,ts,tsx}'],
+        files: ['**/*.{js,jsx,ts,tsx}', 'vite.config.js'],
         rules: {
             '@typescript-eslint/no-unused-vars': [
                 'warn',

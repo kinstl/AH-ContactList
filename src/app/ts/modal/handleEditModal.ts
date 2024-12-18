@@ -45,7 +45,7 @@ export function handleEditModal(
         const newNameFirstLetter = newContact.name.charAt(0).toLowerCase();
 
         const cardNode = document.getElementById(
-            newNameFirstLetter,
+            `letter-${newNameFirstLetter}`,
         ) as HTMLDivElement;
 
         if (handleValidation(cardNode, newContact, true, phone)) {

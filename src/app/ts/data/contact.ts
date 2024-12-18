@@ -27,7 +27,7 @@ export function saveContact(contact: IContact): void {
         if (contactIndex !== -1) {
             contacts.splice(contactIndex, 1);
 
-            if (contacts.length === 0) {
+            if (!contacts.length) {
                 delete contactsData[letter];
             }
             break;
@@ -59,17 +59,15 @@ export function addContact(cardNode: HTMLDivElement, contact: IContact): void {
 
 export function getContact(contactId: string): IContact | null {
     const contactsData = getContactsFromLocalStorage();
+    let contact;
 
     for (const contacts of Object.values(contactsData)) {
-        const contact = contacts.find(
+        contact = contacts.find(
             (contact: IContact) => contact.id === contactId,
         );
-        if (contact) {
-            return contact;
-        }
     }
 
-    return null;
+    return contact ? contact : null;
 }
 
 export function loadContacts(): void {
@@ -77,36 +75,33 @@ export function loadContacts(): void {
 
     for (const [letter, contacts] of Object.entries(contactsData)) {
         const cardNode = document.getElementById(
-            letter,
+            `letter-${letter}`,
         ) as HTMLDivElement | null;
 
-        if (cardNode) {
-            cardNode.classList.add('filled');
+        if (!cardNode) return;
 
-            const infoNode: HTMLDivElement =
-                cardNode.querySelector('.card__info') ||
-                createInfoNode(cardNode);
+        cardNode.classList.add('filled');
 
-            contacts.forEach((contact) => {
-                createContactView(infoNode, contact);
-            });
+        const infoNode: HTMLDivElement =
+            cardNode.querySelector('.card__info') || createInfoNode(cardNode);
 
-            const numNode = cardNode.querySelector(
-                '.card__num',
-            ) as HTMLDivElement | null;
+        contacts.forEach((contact) => {
+            createContactView(infoNode, contact);
+        });
 
-            if (!numNode) {
-                console.error('Number node not found');
-                return;
-            }
+        const numNode = cardNode.querySelector(
+            '.card__num',
+        ) as HTMLDivElement | null;
 
-            if (contacts.length) {
-                numNode.innerText = String(contacts.length);
-            } else {
-                numNode.innerText = '';
-            }
-        } else {
+        if (!numNode) {
+            console.error('Number node not found');
             return;
+        }
+
+        if (contacts.length) {
+            numNode.innerText = String(contacts.length);
+        } else {
+            numNode.innerText = '';
         }
     }
 }
@@ -169,7 +164,7 @@ export function deleteContact(
     if (isSearch) {
         const contactsContainerNode = document.querySelector(
             '.modal--search__contacts',
-        );
+        ) as HTMLDivElement;
         const contactsMainNodes: NodeListOf<HTMLDivElement> =
             document.querySelectorAll('.contacts .contact');
 
@@ -183,10 +178,7 @@ export function deleteContact(
 
         contactNode.remove();
 
-        if (
-            contactsContainerNode &&
-            contactsContainerNode.childElementCount === 0
-        ) {
+        if (!contactsContainerNode.childElementCount) {
             contactsContainerNode.classList.remove('filled');
         }
     } else {

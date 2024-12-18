@@ -21,11 +21,22 @@ const phoneNode = document.getElementById('js-input-phone') as HTMLInputElement;
 const contactsCardNodes =
     document.querySelectorAll<HTMLDivElement>('.contacts__card');
 
-loadContacts();
-initPhoneMask(phoneNode);
-initContactsCardZIndex(contactsCardNodes);
+document.addEventListener('DOMContentLoaded', init);
 
-btnAddNode?.addEventListener('click', () => {
+btnAddNode?.addEventListener('click', handleAddContact);
+btnClearNode?.addEventListener('click', handleClearAllContacts);
+btnSearchNode?.addEventListener('click', handleSearchModal);
+
+contactsCardNodes.forEach((node) => {
+    const cardContainerNode = node.querySelector(
+        '.card__container',
+    ) as HTMLElement;
+    cardContainerNode?.addEventListener('click', () => {
+        node.classList.toggle('show');
+    });
+});
+
+function handleAddContact() {
     if (!nameNode || !vacancyNode || !phoneNode) {
         console.error('Input nodes are missing');
         return;
@@ -40,9 +51,10 @@ btnAddNode?.addEventListener('click', () => {
 
     const nameFirstLetter = contact.name.charAt(0).toLowerCase();
 
-    const targetCard = Array.from(contactsCardNodes).find(
-        (node) => node.id === nameFirstLetter,
-    );
+    const targetCard = Array.from(contactsCardNodes).find((node) => {
+        const nodeLetter = node.id.replace('letter-', '');
+        return nodeLetter === nameFirstLetter;
+    });
 
     if (!handleValidation(targetCard, contact)) {
         return;
@@ -51,9 +63,9 @@ btnAddNode?.addEventListener('click', () => {
     addContact(targetCard as HTMLDivElement, contact);
 
     clearInputs(nameNode, vacancyNode, phoneNode);
-});
+}
 
-btnClearNode?.addEventListener('click', () => {
+function handleClearAllContacts() {
     contactsCardNodes.forEach((node) => {
         const infoNode = node.querySelector('.card__info') as HTMLElement;
         const numNode = node.querySelector('.card__num') as HTMLElement;
@@ -66,17 +78,10 @@ btnClearNode?.addEventListener('click', () => {
     });
 
     localStorage.removeItem('contacts');
-});
+}
 
-btnSearchNode?.addEventListener('click', () => {
-    handleSearchModal();
-});
-
-contactsCardNodes.forEach((node) => {
-    const cardContainerNode = node.querySelector(
-        '.card__container',
-    ) as HTMLElement;
-    cardContainerNode?.addEventListener('click', () => {
-        node.classList.toggle('show');
-    });
-});
+function init() {
+    loadContacts();
+    initPhoneMask(phoneNode);
+    initContactsCardZIndex(contactsCardNodes);
+}

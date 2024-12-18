@@ -17,7 +17,7 @@ export function deleteContactFromLocalStorage(contactId: string): void {
             (contact) => contact.id !== contactId,
         );
 
-        if (contactsData[letter].length === 0) {
+        if (!contactsData[letter].length) {
             delete contactsData[letter];
         }
     }

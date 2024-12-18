@@ -51,7 +51,7 @@ export function handleSearchModal(): void {
         );
 
         contactsNode.innerHTML = '';
-        if (foundContacts.length === 0) {
+        if (!foundContacts.length) {
             contactsNode.classList.add('filled');
             contactsNode.innerHTML = '<p>No matching contacts found.</p>';
             return;
@@ -63,7 +63,7 @@ export function handleSearchModal(): void {
     const showAllContacts = () => {
         const contactsData = getContactsFromLocalStorage();
 
-        if (!contactsData || Object.keys(contactsData).length === 0) {
+        if (!Object.keys(contactsData).length) {
             contactsNode.classList.add('filled');
             contactsNode.innerHTML = '<p>No contacts found.</p>';
             return;

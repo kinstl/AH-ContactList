@@ -9,17 +9,24 @@
     --c-overlay: #000;
 
     // Шрифты
-    --fz: 20px;
-    --fz-l: calc(var(--fz) + 2px); // 22px
-    --fz-m: var(--fz);
-    --fz-s: calc(var(--fz) - 2px); // 18px
-    --fz-contact: 14px;
+    --fz: 2rem; /* 20px */
+    --fz-l: calc(var(--fz) + 0.2rem); /* 22px */
+    --fz-m: var(--fz); /* 20px */
+    --fz-s: calc(var(--fz) - 0.2rem); /* 18px */
+    --fz-contact: 1.4rem; /* 14px */
+
+    // Z-index
+    --z-hidden: -1;
+    --z-modal-overlay: 99;
+    --z-modal-edit-overlay: 101;
+    --z-modal: 100;
+    --z-modal-edit: 102;
 
     @media (max-width: 1200px) {
-        --fz: 18px;
+        --fz: 1.8rem;
     }
 
     @media (max-width: 768px) {
-        --fz: 16px;
+        --fz: 1.6rem;
     }
 }
